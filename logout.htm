@@ -1,0 +1,47 @@
+<!--
+Student Name: Tuan Nam Dinh Tran
+Student ID: 101373703
+
+This file responsible for log out function for both administrator and customer. It will display a "Thank you" message and ID 
+ -->
+
+
+
+<html XMLns="http://www.w3.org/1999/xHTML"> 
+  <head> 
+    <title>Logout page</title> 
+	
+	 <script>
+  var xhr = new XMLHttpRequest();
+  
+  
+  function logOut(){
+  xhr.open("GET" ,"logOut.php", true );
+  xhr.onreadystatechange = getData;
+  xhr.send(null); 
+  }
+  
+  
+  function getData(){
+  
+  if(xhr.readyState == 4 && xhr.status == 200){
+	var serverText = xhr.responseText;
+	var ID = localStorage.getItem("ID");
+	serverText = serverText + ID;
+	document.getElementById("div1").innerHTML = serverText;
+  }
+  
+  }
+  
+  
+  
+  </script>
+  </head> 
+  <body onload = "logOut()">
+  <article>
+  <div id = "div1"></div>
+  </article>
+ 
+  
+  </body> 
+ </html>

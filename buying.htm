@@ -1,0 +1,368 @@
+<!--
+Student Name: Tuan Nam Dinh Tran
+Student ID: 101373703
+
+This file allows customer to ahop
+ -->
+<html>
+<head>
+<title>Shopping page</title>
+</head>
+<body onload = "myFunction()">
+	<nav>
+	 <p><a href = "logout.htm">Log out</a></p>
+	</nav>
+	<h1>Welcome to buying page</h1>
+	<p>Below is the list of available items</p>
+	<main>
+	<div id = "div1"></div>
+	<div id = "div2"></div>
+	</main>
+	
+</body>
+<script>
+var xhr = new XMLHttpRequest();
+var xhr1 = new XMLHttpRequest();
+var cart = {};
+/*This function allows refreshing the stock after 10 second*/
+function myFunction(){
+showItems();
+setInterval(showItems,10000);
+}
+/*This function show the content in XML file*/
+function showItems(){
+  xhr.open("GET" ,"buyingProcess.php?type=display", true );
+  xhr.onreadystatechange = getData;
+  xhr.send(null); 
+}
+ 
+ 
+
+function getData(){
+  
+  if(xhr.readyState == 4 && xhr.status == 200){
+	var serverText = xhr.responseXML;
+	console.log(serverText);
+	document.getElementById("div1").innerHTML = "";
+	document.getElementById("div1").append(formatItem(serverText));
+  }
+}
+
+/*This function formats the content in XML file*/
+function formatItem(text1){
+var a = text1.getElementsByTagName("item");
+var i;
+var b = document.createElement("table");
+var c = document.createElement("tr");
+var d = ["Item Number","Item Name","Price","Description","Quantity","Add"];
+for (i = 0; i<d.length;i++){
+var e = document.createElement("th");
+var f = document.createTextNode(d[i]);
+e.appendChild(f);
+c.appendChild(e);
+}
+b.appendChild(c);
+
+for(i = 0;i<a.length;i++){
+if(a[i].firstChild.nextSibling.nextSibling.nextSibling.nextSibling.textContent == 0){
+continue;
+}
+else{
+c = document.createElement("tr");
+/*get the item number*/
+var g = document.createElement("td");
+var h = document.createTextNode(a[i].firstChild.textContent);
+g.appendChild(h);
+
+
+/*get the item name*/
+var j = document.createElement("td");
+var k = document.createTextNode(a[i].firstChild.nextSibling.textContent);
+j.appendChild(k);
+
+/*get the item price*/
+var l = document.createElement("td");
+var m = document.createTextNode(a[i].firstChild.nextSibling.nextSibling.textContent);
+l.appendChild(m);
+
+/*get the item description*/
+var n = document.createElement("td");
+var o = document.createTextNode(a[i].firstChild.nextSibling.nextSibling.nextSibling.textContent);
+n.appendChild(o);
+
+/*get the item quantity*/
+var t = document.createElement("td");
+var u = document.createTextNode(a[i].firstChild.nextSibling.nextSibling.nextSibling.nextSibling.textContent);
+t.appendChild(u);
+
+ if(parseInt(a[i].firstChild.nextSibling.nextSibling.nextSibling.nextSibling.textContent) == 0){
+ 
+ if(!cart.hasOwnProperty(a[i].firstChild.textContent)){
+  cart[a[i].firstChild.textContent] = [0,0,false];
+     }
+   
+  else{
+    cart[a[i].firstChild.textContent][2] = false;
+   }
+}
+
+var p = document.createElement("td");
+var q = document.createElement("button");
+
+var r = document.createAttribute("onclick");
+r.value = 'request("add","'+a[i].firstChild.textContent+'","'+a[i].firstChild.nextSibling.nextSibling.textContent+'")';
+
+var s = document.createTextNode("Add to cart");
+q.appendChild(s);
+
+
+q.setAttributeNode(r);
+
+
+p.appendChild(q);
+
+
+c.appendChild(g);
+c.appendChild(j);
+c.appendChild(l);
+c.appendChild(n);
+c.appendChild(t);
+c.appendChild(p);
+
+b.appendChild(c);
+}
+}
+
+return b;
+}
+
+/*This function will handle request*/
+function request(type,ID,price){
+ if(type == "add"){
+ var b;
+ var i;
+ var h;
+   xhr1.open("GET" ,"buyingProcess.php?type=display", true );
+   xhr1.onreadystatechange = function (){
+   if(xhr1.readyState == 4 && xhr1.status == 200){
+	var serverText = xhr1.responseXML;
+	console.log(serverText);
+	b = serverText.getElementsByTagName("item");
+	console.log(b);
+	for(i =0;i<b.length;i++){
+	 if(b[i].firstChild.textContent == ID){
+		h = b[i].firstChild.nextSibling.nextSibling.nextSibling.nextSibling.textContent;
+		 
+	 }
+	}
+	}
+  }
+xhr1.send(null);
+ 
+  xhr.open("GET" ,"buyingProcess.php?type=add&ID="+ID, true );
+  xhr.onreadystatechange = function (){
+  if(xhr.readyState == 4 && xhr.status == 200){
+	var serverText = xhr.responseXML;
+	console.log(serverText);
+	var a = serverText.getElementsByTagName("item");
+	
+	for(i=0;i<a.length;i++){
+	if(a[i].firstChild.nextSibling.nextSibling.nextSibling.nextSibling.textContent == 0 && h === "0"){
+ 
+     if(!cart.hasOwnProperty(a[i].firstChild.textContent)){
+     cart[a[i].firstChild.textContent] = [0,0,false];
+     }
+   
+    else{
+      cart[a[i].firstChild.textContent][2] = false;
+     }
+    }
+	}
+	document.getElementById("div1").innerHTML = "";
+	document.getElementById("div1").append(formatItem(serverText));
+	
+	if(cart.hasOwnProperty(ID)){
+  if(cart[ID][2]==false){
+	alert("Sorry");
+	showCart();
+  }
+  else if(cart[ID][2]==true) {
+   cart[ID][0] = parseInt(cart[ID][0]) + 1;
+   showCart();
+  }
+  }
+  if(!cart.hasOwnProperty(ID)){
+  cart[ID] = ["1", price,true];
+  showCart();
+  }	
+  }
+};
+  xhr.send(null); 
+ }
+
+ if(type == "remove"){
+  xhr.open("GET" ,"buyingProcess.php?type=remove&ID="+ID, true );
+  xhr.onreadystatechange = getData;
+  if(cart[ID][0] == 1){
+  delete cart[ID];
+  showCart();
+  }
+  else if (cart[ID][0] > 1) {
+  cart[ID][0] = parseInt(cart[ID][0]) - 1;
+  showCart();
+  
+  }  
+  xhr.send(null);
+ }
+ 
+ 
+  if(type == "confirm"){
+  xhr.open("GET" ,"buyingProcess.php?type=confirm", true );
+  xhr.onreadystatechange = getData;
+  var total = 0;
+	for(ID in cart){
+	total = total + cart[ID][1]*cart[ID][0];
+	}
+  alert("Your purchase has been confirmed and total amount due to pay is "+total);
+  cart={};
+  console.log(cart);
+  showCart();
+  xhr.send(null);
+ }
+ 
+  if(type == "reset"){
+  xhr.open("GET" ,"buyingProcess.php?type=reset", true );
+  xhr.onreadystatechange = getData;
+  
+  alert("Your cart is empty now!");
+  cart={};
+  console.log(cart);
+  showCart();
+  xhr.send(null);
+ }
+ 
+ 
+ 
+ }
+ 
+
+ /*This function shows the cart*/
+ function showCart(){
+    var i;
+	if(!isEmpty(cart)){
+	var b = document.createElement("table");
+    var c = document.createElement("tr");
+	var d = ["Item Number","Price","Quantity","Remove"];
+	for (i = 0; i<d.length;i++){
+	var e = document.createElement("th");
+	var f = document.createTextNode(d[i]);
+	e.appendChild(f);
+	c.appendChild(e);
+	}
+	
+	b.appendChild(c);
+
+	
+	for(ID in cart){
+	if(cart[ID][0]!= 0){
+	 c = document.createElement("tr");
+	 var g = document.createElement("td");
+	 var h = document.createTextNode(ID);
+	 g.appendChild(h);
+	 
+	 var j = document.createElement("td");
+	 var k = document.createTextNode(cart[ID][1]);
+	 j.appendChild(k);
+	 
+	 var l = document.createElement("td");
+	 var m = document.createTextNode(cart[ID][0]);
+	 l.appendChild(m);
+	 
+	 
+	 var n = document.createElement("td");
+	 var o = document.createElement("button");
+	 var p = document.createTextNode("Remove one item");
+	 var q = document.createAttribute("onclick");
+	 q.value = "request('remove',"+ID+")";
+	 o.setAttributeNode(q);
+	 o.appendChild(p);
+	 n.appendChild(o);
+	 
+	 
+	c.appendChild(g);
+	c.appendChild(j);
+	c.appendChild(l);
+	c.appendChild(n);
+	
+	b.appendChild(c);
+	}
+	}
+	var total = 0;
+	for(ID in cart){
+	total = total + cart[ID][1]*cart[ID][0];
+	}
+	c = document.createElement("tr");
+	g = document.createElement("td");
+	h = document.createTextNode("Total: ");
+	g.appendChild(h);
+	 
+	j = document.createElement("td");
+	k = document.createTextNode(total);
+	j.appendChild(k);
+	 
+	c.appendChild(g);
+	c.appendChild(j);
+	
+	b.appendChild(c);
+	
+	
+	
+	c = document.createElement("tr");
+	var r = document.createElement("td");
+	var s = document.createElement("button");
+	var t = document.createTextNode("Confirm purchase");
+	var u = document.createAttribute("onclick");
+	u.value = "request('confirm','0')";
+	s.setAttributeNode(u);
+	s.appendChild(t);
+	r.appendChild(s);
+	
+    n = document.createElement("td");
+	o = document.createElement("button");
+	p = document.createTextNode("Reset cart");
+	q = document.createAttribute("onclick");
+	q.value = "request('reset','0')";
+	o.setAttributeNode(q);
+	o.appendChild(p);
+	n.appendChild(o);
+	
+	c.appendChild(r);
+	c.appendChild(n);
+	
+	b.appendChild(c);
+	
+	document.getElementById("div2").innerHTML = "";
+	document.getElementById("div2").append(b);
+	
+}
+/*this function checks if an object is empty or not*/
+if(isEmpty(cart)){
+
+document.getElementById("div2").innerHTML = "";
+}
+}
+
+function isEmpty(obj) {
+    for(var key in obj) {
+        if(obj.hasOwnProperty(key))
+            return false;
+    }
+    return true;
+}
+
+
+
+
+
+</script>
+</html>

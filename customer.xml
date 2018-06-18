@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<customers>
+ <customer>
+  <ID>1</ID>
+  <email>Steve123@mail.com</email>
+  <name>Steve Steve</name>
+  <password>Steve123</password>
+  <phone>123456789</phone>
+ </customer>
+ 
+ <customer>
+  <ID>2</ID>
+  <email>Jack456@mail.com</email>
+  <name>Jack Jack</name>
+  <password>Jack456</password>
+  <phone>5965131</phone>
+
+ </customer>
+ 
+ <customer>
+  <ID>3</ID>
+  <email>Jill101112@mail.com</email>
+  <name>Jill Jill</name>
+  <password>Jill101112</password>
+  <phone>8491261</phone>
+ </customer>
+ 
+ <customer>
+  <ID>4</ID>
+  <email>Jake131415@mail.com</email>
+  <name>Jake Jake</name>
+  <password>Jake131415</password>
+  <phone>563513</phone>
+ </customer>
+
+<customer><ID>59e58aa6376f8</ID><email>ubjhbj@hgvhvghvgh.bubu</email><name>1234567890 1234567890</name><password>123</password><phone/></customer><customer><ID>59e59526527e9</ID><email/><name> </name><password/><phone/></customer><customer><ID>59e59a0619331</ID><email>Jenny@mail.com</email><name>Jenny Woo</name><password>1234</password><phone/></customer><customer><ID>59e706e6bd666</ID><email>admin@mail.com</email><name>1234567890 1234567890</name><password>123</password><phone>12313</phone></customer><customer><ID>59ed6e465fe10</ID><email>mklmlkmk@nbn.byubu</email><name>1234567890 1234567890</name><password>123456</password><phone>12313</phone></customer><customer><ID>59ed6e9333fe8</ID><email>theteam5@mail.com</email><name>1234567890 1234567890</name><password>123</password><phone>12313</phone></customer><customer><ID>59ed700a5229e</ID><email>admin@gmail.com</email><name>1234567890 1234567890</name><password>123</password><phone>12313</phone></customer></customers>

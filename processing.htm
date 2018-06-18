@@ -1,0 +1,138 @@
+<!--
+Student Name: Tuan Nam Dinh Tran
+Student ID: 101373703
+
+This file responsible processing items for administrator 
+ -->
+
+<html>
+<script>
+var xhr = new XMLHttpRequest();
+function showItems(){
+  xhr.open("GET" ,"managerProcess.php?type=display", true );
+  xhr.onreadystatechange = getData;
+  xhr.send(null); 
+}
+
+function process(){
+  xhr.open("GET" ,"managerProcess.php?type=process", true );
+  xhr.onreadystatechange = getData;
+  xhr.send(null); 
+}
+
+
+
+
+function getData(){
+  
+  if(xhr.readyState == 4 && xhr.status == 200){
+	var serverText = xhr.responseXML;
+	console.log(serverText);
+	document.getElementById("div1").innerHTML = "";
+	document.getElementById("div1").append(formatItem(serverText));
+  }
+}
+/*This function format the respond XML document*/
+function formatItem(text1){
+var a = text1.getElementsByTagName("item");
+var i;
+var b = document.createElement("table");
+var c = document.createElement("tr");
+var d = ["Item Number","Item Name","Price","Quantity Available","Quantity on hold","Quantity sold"];
+for (i = 0; i<d.length;i++){
+var e = document.createElement("th");
+var f = document.createTextNode(d[i]);
+e.appendChild(f);
+c.appendChild(e);
+}
+b.appendChild(c);
+
+for(i = 0;i<a.length;i++){
+c = document.createElement("tr");
+/*get the item number*/
+var g = document.createElement("td");
+var h = document.createTextNode(a[i].firstChild.textContent);
+g.appendChild(h);
+
+
+/*get the item name*/
+var j = document.createElement("td");
+var k = document.createTextNode(a[i].firstChild.nextSibling.textContent);
+j.appendChild(k);
+
+/*get the item price*/
+var l = document.createElement("td");
+var m = document.createTextNode(a[i].firstChild.nextSibling.nextSibling.textContent);
+l.appendChild(m);
+
+
+/*get the item quantity*/
+var t = document.createElement("td");
+var u = document.createTextNode(a[i].firstChild.nextSibling.nextSibling.nextSibling.nextSibling.textContent);
+t.appendChild(u);
+
+/*get the item on hold quantity*/
+var p = document.createElement("td");
+var q = document.createTextNode(a[i].firstChild.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.textContent);
+p.appendChild(q);
+
+/*get the item sold quantity*/
+var n = document.createElement("td");
+var o =document.createTextNode(a[i].firstChild.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.textContent);
+n.appendChild(o);
+
+c.appendChild(g);
+c.appendChild(j);
+c.appendChild(l);
+c.appendChild(t);
+c.appendChild(p);
+c.appendChild(n);
+
+
+b.appendChild(c);
+}
+
+c = document.createElement("tr");
+g = document.createElement("td");
+h = document.createElement("button");
+i = document.createAttribute("onclick");
+k = document.createTextNode("Process");
+h.appendChild(k);
+i.value = "process()";
+
+h.setAttributeNode(i);
+
+
+
+
+g.appendChild(h);
+c.appendChild(g);
+b.appendChild(h);
+
+
+
+return b;
+}
+
+
+
+</script>
+
+
+
+<head>
+<title>Processing</title>
+</head>
+<body  onload = "showItems()">
+<nav>
+<li><a href = "listing.htm">Listing</a></li>
+<li><a href = "processing.htm">Processing</a></li>
+<li><a href = "logout.htm">Log out</a></li>
+</nav>
+	<h1>Processing form</h1>
+	<main>
+	<div id = "div1"></div>
+	</main>
+	
+</body>
+</html>

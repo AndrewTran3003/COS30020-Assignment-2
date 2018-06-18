@@ -1,0 +1,107 @@
+<html>
+<script>
+var xhr = new XMLHttpRequest();
+  
+  
+  function gValidate(){
+  var name = document.getElementById("name").value;
+  var price = document.getElementById("price").value;
+  var qty = document.getElementById("qty").value;
+  var desc = document.getElementById("desc").value;
+
+  var error = "";
+  var k = 0;
+  
+  if(name === ""){
+	error += "Please enter the name of the product\n";
+  }
+  if(price === ""){
+	error += "Please enter the price of the product\n";
+  }
+  if(qty === ""){
+	error += "Please enter quantity of the product\n";
+  }
+  
+  if(desc === ""){
+	error += "Please enter product description\n";
+  }
+  
+
+  
+  
+  if(price !== "" && isNaN(price)){
+	error += "Invalid price\n";
+  }
+  
+  if (qty !== "" && isNaN(qty)){
+	error += "Invalid quantity\n";
+  }
+  
+  if(error === ""){
+  
+  xhr.open("GET" , "goodChecking.php?name="+name+"&price="+price+"&qty="+qty+"&desc="+desc, true );
+  alert("goodChecking.php?name="+name+"&price="+price+"&qty="+qty+"&desc="+desc);
+  xhr.onreadystatechange = getData;
+  xhr.send(null); 
+  }
+  else if(error !== ""){
+  alert(error);
+  }
+  }
+  
+  function getData(){
+  
+  if(xhr.readyState == 4 && xhr.status == 200){
+	alert(xhr.responseText);
+	var serverText = xhr.responseText;
+	document.getElementById("div1").innerHTML = serverText;
+  }
+  
+  }
+  
+
+
+</script>
+
+
+<body>
+<nav>
+<ul>
+<li><a href = "listing.htm">Listing</a></li>
+<li><a href = "processing.htm">Processing</a></li>
+<li><a href = "logout.htm">Log out</a></li>
+</ul>
+</nav>
+	<form>
+	<table>
+		<tr>
+			<td>Item name: </td>
+			<td><input type = "text" name = "name" id = "name"/></td>
+		</tr>
+		<tr>
+			<td>Item price: </td>
+			<td><input type = "text" name = "price" id = "price"/></td>
+		</tr>
+		<tr>
+			<td>Item quantity: </td>
+			<td><input type = "text" name = "qty" id = "qty"/></td>
+		</tr>
+		<tr>
+			<td>Item description: </td>
+			<td><textarea rows = "4" cols = "50" id = "desc"></textarea></td>
+		</tr>
+		
+		<tr>
+			<td><input type = "button" value = "submit" onclick = "gValidate()"/> </td>
+			<td><input type = "reset" value="Reset"></td>
+		</tr>
+
+
+	</table>
+	</form>
+	
+	<div id = "div1"></div>
+</body>
+
+
+</html>

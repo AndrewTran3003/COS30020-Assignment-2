@@ -1,0 +1,74 @@
+<!--
+Student Name: Tuan Nam Dinh Tran
+Student ID: 101373703
+
+This file responsible for loging in for administrator 
+ -->
+
+
+<html XMLns="http://www.w3.org/1999/xHTML"> 
+  <head> 
+    <title>Admin Login</title> 
+	
+	 <script>
+  var xhr = new XMLHttpRequest();
+  
+  /*This function will check inputed information */
+  function mValidate(){
+  var Uname = document.getElementById("Uname").value;
+  var pw = document.getElementById("pw").value;
+  pw = pw.toString();
+  var error = "";
+  var k = 0;
+  if(Uname === ""){
+	error += "Please enter User name\n";
+  }
+  
+  if(pw === ""){
+	error += "Please enter password\n";
+  }
+  
+  
+  if(error === ""){
+  
+  xhr.open("GET" ,"loginChecking.php?type=manager&Uname="+Uname+"&pw="+pw, true );
+  alert("loginChecking.php?Uname ="+Uname+"&pw="+pw);
+  xhr.onreadystatechange = getData;
+  xhr.send(null); 
+  }
+  else if(error !== ""){
+  alert(error);
+  }
+  }
+  
+  function getData(){
+  
+  if(xhr.readyState == 4 && xhr.status == 200){
+	alert(xhr.responseText);
+	var serverText = xhr.responseText;
+	serverText = serverText.split("|");
+	document.getElementById("div1").innerHTML = serverText[0];
+	localStorage.setItem("ID", serverText[1]);
+  }
+  
+  }
+  
+  
+  
+  </script>
+  </head> 
+  <body>
+  <article>
+  <H1>Register</H1>
+
+  <form method = "POST">
+		<label>User Name<input  type = "text" id = "Uname" name = "Fname" ></label></br>
+	    <label>Password: <input type = "password" id = "pw" name = "pw" ></label></br>
+		<input type = "button" value = "submit" onclick = "mValidate()"/>
+  </form>
+  <div id = "div1"></div>
+  </article>
+ 
+  
+  </body> 
+ </html>

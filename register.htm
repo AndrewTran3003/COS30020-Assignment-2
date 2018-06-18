@@ -1,0 +1,104 @@
+<!--
+Student Name: Tuan Nam Dinh Tran
+Student ID: 101373703
+
+This file responsible for registering new customer 
+ -->
+
+
+<html XMLns="http://www.w3.org/1999/xHTML"> 
+  <head> 
+    <title>Register</title> 
+	
+	 <script>
+  var xhr = new XMLHttpRequest();
+  
+  /*This function validate the input information*/
+  function validate(){
+  var Fname = document.getElementById("Fname").value;
+  var Lname = document.getElementById("Lname").value;
+  var pw = document.getElementById("pw").value;
+  var repw = document.getElementById("repw").value;
+  var email = document.getElementById("email").value;
+  var phone = document.getElementById("phone").value;
+  var error = "";
+  var k = 0;
+  if(Fname === ""){
+	error += "Please enter first name\n";
+  }
+  if(Lname === ""){
+	error += "Please enter Last name\n";
+  }
+  if(pw === ""){
+	error += "Please enter password\n";
+  }
+  
+  if(repw === ""){
+	error += "Please enter retyped password\n";
+  }
+  
+  if(email === ""){
+	error += "Please enter email\n";
+  }
+  
+  
+  
+  
+  
+  /*phone = phone.toString();
+  alert(phone);
+  if((phone !== "" && !phone.match( /\(0\d\)\d\d\d\d\d\d\d\d/gi ))||( phone !== "" && !phone.match(/0\d\d\d\d\d\d\d\d\d/gi))){
+	error += "Invalid phone number\n";
+  }*/
+  
+  if (pw !== repw){
+	error += "Password and retype password must be the same!\n";
+  }
+  
+  if(error === ""){
+  
+  xhr.open("GET" , "customerChecking.php?Fname="+Fname+"&Lname="+Lname+"&pw="+pw+"&email="+email+"&phone=" +phone, true );
+  xhr.onreadystatechange = getData;
+  xhr.send(null); 
+  }
+  else if(error !== ""){
+  alert(error);
+  }
+  }
+  
+  function getData(){
+  
+  if(xhr.readyState == 4 && xhr.status == 200){
+	alert(xhr.responseText);
+	var serverText = xhr.responseText;
+	serverText = serverText.split("|");
+	document.getElementById("div1").innerHTML = serverText[0];
+	localStorage.setItem("ID", serverText[1]);
+  }
+  
+  }
+  
+  
+  
+  </script>
+  </head> 
+  <body>
+  
+  <article>
+  <H1>Register</H1>
+
+  <form method = "POST">
+		<label>First Name: <input  type = "text" id = "Fname" name = "Fname" ></label></br>
+		<label>Last Name: <input type = "text" id = "Lname" name = "Lname" ></label></br>
+	    <label>Password: <input type = "password" id = "pw" name = "pw" ></label></br>
+		<label>Retype your password: <input  id ="repw" type = "password" name = "repw"></label></br>
+		<label>Email: <input  type = "text" id = "email" name = "email" ></label></br>
+		<label>Phone: <input type = "text" id ="phone" name = "phone"></label></br>
+		<input type = "button" value = "submit" onclick = "validate()"/>
+  </form>
+  <div id = "div1"></div>
+  </article>
+ 
+  
+  </body> 
+ </html>
